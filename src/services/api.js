@@ -22,6 +22,12 @@ export const getPosts = async () => {
 export const createPost = async (postData) => {
   try {
     console.log("Creating post:", postData);
+
+    // Используем загруженный аватар или генерируем по имени
+    const avatar =
+      postData.avatarPreview ||
+      `https://ui-avatars.com/api/?name=${encodeURIComponent(postData.user)}&background=5A6FA8&color=fff&size=128`;
+
     const response = await fetch(API_BASE_URL, {
       method: "POST",
       headers: {
@@ -32,7 +38,7 @@ export const createPost = async (postData) => {
         text: postData.content,
         date: Math.floor(Date.now() / 1000),
         user: postData.user,
-        avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(postData.user)}&background=5A6FA8&color=fff&size=128`,
+        avatar: avatar,
       }),
     });
 

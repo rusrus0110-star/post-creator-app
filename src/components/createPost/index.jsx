@@ -4,6 +4,8 @@ import styles from "./style.module.css";
 
 const CreatePost = ({ onCreatePost }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [avatarPreview, setAvatarPreview] = useState(null);
+
   const {
     register,
     handleSubmit,
@@ -11,12 +13,41 @@ const CreatePost = ({ onCreatePost }) => {
     reset,
   } = useForm();
 
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Проверка типа файла
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      // Проверка размера (макс 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size must be less than 5MB");
+        return;
+      }
+
+      // Создаем превью
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      await onCreatePost(data);
+      // Передаем данные с аватаром
+      await onCreatePost({
+        ...data,
+        avatarPreview: avatarPreview,
+      });
       reset();
-    } catch (error) {
+      setAvatarPreview(null);
+    } catch {
       alert("Error creating post. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -28,14 +59,30 @@ const CreatePost = ({ onCreatePost }) => {
       <h2 className={styles.title}>Create Post</h2>
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.formGroup}>
-          <div className={styles.avatar}>
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="8" r="4" fill="#5A6FA8" />
-              <path
-                d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20V21H4V20Z"
-                fill="#5A6FA8"
-              />
-            </svg>
+          <div className={styles.avatarWrapper}>
+            <label htmlFor="avatarUpload" className={styles.avatarUploadLabel}>
+              <div className={styles.avatar}>
+                {avatarPreview ? (
+                  <img src={avatarPreview} alt="Avatar preview" />
+                ) : (
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="8" r="4" fill="#5A6FA8" />
+                    <path
+                      d="M4 20C4 16.6863 6.68629 14 10 14H14C17.3137 14 20 16.6863 20 20V21H4V20Z"
+                      fill="#5A6FA8"
+                    />
+                  </svg>
+                )}
+              </div>
+              <div className={styles.uploadHint}>Click to upload avatar</div>
+            </label>
+            <input
+              id="avatarUpload"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className={styles.fileInput}
+            />
           </div>
 
           <div className={styles.inputWrapper}>
@@ -47,8 +94,12 @@ const CreatePost = ({ onCreatePost }) => {
               {...register("user", {
                 required: "Username is required",
                 minLength: {
-                  value: 3,
-                  message: "Username must be at least 3 characters",
+                  value: 1,
+                  message: "Username must be at least 1 character",
+                },
+                pattern: {
+                  value: /[a-zA-Z]/,
+                  message: "Username must contain at least one letter",
                 },
                 maxLength: {
                   value: 50,
