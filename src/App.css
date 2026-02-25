@@ -1,0 +1,32 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #7b9fe8 0%, #a8c5f5 100%);
+}
+
+.main-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .main-container {
+    grid-template-columns: 1fr;
+  }
+}
