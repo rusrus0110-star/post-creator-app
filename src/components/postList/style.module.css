@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #000000;
+  text-align: left;
+  margin-bottom: 0;
+}
+
+.postList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #2c3e78;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+}
+
+.emptyState {
+  text-align: center;
+  font-size: 1.125rem;
+  color: #2c3e78;
+  padding: 3.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  font-weight: 500;
+}

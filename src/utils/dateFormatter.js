@@ -1,7 +1,16 @@
-export const formatDate = (dateString) => {
-  if (!dateString) return "Unknown date";
+export const formatDate = (dateValue) => {
+  if (!dateValue) return "Unknown date";
 
-  const date = new Date(dateString);
+  let date;
+
+  // Если это Unix timestamp (число)
+  if (typeof dateValue === "number") {
+    // Конвертируем секунды в миллисекунды
+    date = new Date(dateValue * 1000);
+  } else {
+    // Если это строка ISO
+    date = new Date(dateValue);
+  }
 
   if (isNaN(date.getTime())) return "Invalid date";
 
