@@ -83,5 +83,6 @@ Responsive layout
 
 Separation of UI and API layer
 
-📸 Screenshot
-./screenshot.png
+## 📸 Screenshot
+
+![Application Screenshot](./screenshot.png)
