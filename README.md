@@ -1,67 +1,87 @@
-# Post Creator App
+Post Creator App
 
-A React application for creating and managing posts with pagination.
+A React application for user registration and post management with real-time validation and pagination.
 
-## 🚀 Features
+🚀 Core Features
+User Registration
 
-### Create Post
+4–20 character username (unique, async validation)
 
-Username field (minimum 1 character, must contain at least one letter)
-Post title (3-100 characters)
-Post content (10-1000 characters)
-Avatar upload (max 5MB, image files only)
-Auto-generated avatar based on username if not uploaded
+Email with uniqueness check
 
-### Post Display
+Password validation (min 6 chars, uppercase + number)
 
-User avatar and username
-Post ID and creation date
-Post title and full text content
-Delete button with confirmation
+Age (18–100)
 
-### Pagination
+Phone format: +65XXXXXX XX-XX
+
+Required terms agreement with timestamp
+
+Post Management
+
+Only registered users can create posts
+
+Title (3–100 characters)
+
+Content (10–1000 characters)
+
+Optional avatar upload (max 5MB)
+
+Post deletion with confirmation
+
+Pagination
 
 3 posts per page
-Previous/Next navigation
-Current page indicator
 
-## 📱 Responsive Design
+Previous / Next navigation
 
-The application uses relative units (rem, em, %) for full responsiveness:
-Desktop - Two-column layout (posts + create form)
-Tablet - Adaptive spacing and font sizes
-Mobile - Single-column stacked layout
+🛠 Tech Stack
 
-✅ Validation
-
-Username: Required, min 1 character, must contain a letter, max 50 characters
-Title: Required, min 3 characters, max 100 characters
-Content: Required, min 10 characters, max 1000 characters
-Avatar: Image files only, max 5MB
-Browser Support
-Chrome (latest)
-Firefox (latest)
-Safari (latest)
-Edge (latest)
-
-🛠️ Technologies
 React
-Axios
+
 React Hook Form
+
+Axios
+
 CSS Modules
+
 MockAPI
+
+📂 Architecture
 src/
-├── assets/images/ # Static resources (logo)
-├── components/ # React components
+├── components/
 │ ├── header/
 │ ├── postList/
 │ ├── postItem/
 │ ├── createPost/
+│ ├── registrationForm/
 │ └── pagination/
-├── services/ # API integration
-└── utils/ # Helper functions
-Backend: https://699eb2fe78dda56d396b07da.mockapi.io/posts
+├── services/
+│ ├── api.js
+│ └── userApi.js
+├── utils/
+│ └── dateFormatter.js
+├── App.js
+└── index.js
+🔗 API
 
-## 📸 Screenshot
+Posts:
+https://699eb2fe78dda56d396b07da.mockapi.io/posts
 
-![Application Screenshot](./screenshot.png)
+Users:
+https://699eb2fe78dda56d396b07da.mockapi.io/users
+
+📌 Key Highlights
+
+Real-time form validation
+
+Async uniqueness checks
+
+Clean modular architecture
+
+Responsive layout
+
+Separation of UI and API layer
+
+📸 Screenshot
+./screenshot.png

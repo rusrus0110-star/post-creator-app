@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { checkUsernameExists } from "../../services/userApi";
 import styles from "./style.module.css";
 
 const CreatePost = ({ onCreatePost }) => {
@@ -11,24 +12,22 @@ const CreatePost = ({ onCreatePost }) => {
     handleSubmit,
     formState: { errors },
     reset,
+    setError,
   } = useForm();
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Проверка типа файла
       if (!file.type.startsWith("image/")) {
         alert("Please select an image file");
         return;
       }
 
-      // Проверка размера (макс 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert("File size must be less than 5MB");
         return;
       }
 
-      // Создаем превью
       const reader = new FileReader();
       reader.onloadend = () => {
         setAvatarPreview(reader.result);
@@ -38,25 +37,54 @@ const CreatePost = ({ onCreatePost }) => {
   };
 
   const onSubmit = async (data) => {
+    console.log("=== CREATE POST SUBMIT ===");
+    console.log("Form data:", data);
+
     setIsSubmitting(true);
+
     try {
-      // Передаем данные с аватаром
+      console.log("Checking if user exists:", data.user);
+
+      // Проверяем СУЩЕСТВУЕТ ли пользователь в БД
+      const userExists = await checkUsernameExists(data.user);
+
+      console.log("User exists result:", userExists);
+
+      if (!userExists) {
+        console.log("User NOT found - showing error");
+        setError("user", {
+          type: "manual",
+          message: "User not registered. Please register first.",
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      console.log("User found - creating post");
+
+      // Если пользователь существует - создаем пост
       await onCreatePost({
         ...data,
         avatarPreview: avatarPreview,
       });
+
+      console.log("Post created successfully");
+
       reset();
       setAvatarPreview(null);
-    } catch {
+    } catch (error) {
+      console.error("Error in onSubmit:", error);
       alert("Error creating post. Please try again.");
     } finally {
       setIsSubmitting(false);
+      console.log("==========================");
     }
   };
 
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Create Post</h2>
+
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles.formGroup}>
           <div className={styles.avatarWrapper}>
